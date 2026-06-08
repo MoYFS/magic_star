@@ -3,10 +3,8 @@ import StarSky from '@/components/StarSky.vue'
 </script>
 
 <template>
-  <StarSky>
+  <StarSky :warpActive="true" :warpTrail="false" :movementSpeed="5.0" >
     <main class="app-content">
-<!--      <h1>magic_star</h1>-->
-<!--      <p>星空已点亮 ✨</p>-->
     </main>
   </StarSky>
 </template>

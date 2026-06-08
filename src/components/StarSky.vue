@@ -7,6 +7,22 @@ let stars = []
 let bgPatches = []
 let shootingStars = []
 
+// ---- 3D 星空移动参数（Props，可由父组件传入，有默认值）----
+//   warpActive     — 是否启用 3D 移动效果，默认 true（开启）
+//   warpTrail      — 是否开启拖尾光轨，默认 true（开启）
+//   movementSpeed  — 星移速度因子，默认 3.0，建议范围 0.5 ~ 6.0
+//
+// 使用示例：
+//   <StarSky :warpActive="false" :warpTrail="false" :movementSpeed="2.0" />
+const props = defineProps({
+  warpActive: { type: Boolean, default: true },
+  warpTrail: { type: Boolean, default: true },
+  movementSpeed: { type: Number, default: 3.0 },
+})
+
+let maxZ = 2000                    // 最大深度（自动计算）
+let focalLength = 800             // 镜头焦距（自动计算）
+
 // ---- 流星/彗星 ----
 function spawnShootingStar(w, h) {
   // 从左边出发→向右，从右边→向左，从上边→向下，从下边→向上
@@ -77,12 +93,20 @@ function pickColor() {
 function initStars(w, h) {
   stars = []
   const count = Math.round(w * h * 0.0005)
+  // 3D 空间参数：z 轴深度范围 [minZ, maxZ]
+  maxZ = Math.max(w, h) * 2
+  focalLength = Math.max(w, h) * 0.8
+  const minZ = 10
   for (let i = 0; i < count; i++) {
     const c = pickColor()
-    const r = 0.5 + Math.pow(Math.random(), 2) * 3.0
-    const twinkle = r > 1.2 ? 0.2 + Math.random() * 0.3 : 0.03 + Math.random() * 0.12
+    const baseR = 0.5 + Math.pow(Math.random(), 2) * 3.0
+    const twinkle = baseR > 1.2 ? 0.2 + Math.random() * 0.3 : 0.03 + Math.random() * 0.12
     stars.push({
-      x: Math.random() * w, y: Math.random() * h, r,
+      // 3D 坐标：x, y 以屏幕中心为原点向外散布，z 为深度
+      x: (Math.random() - 0.5) * w * 2.5,
+      y: (Math.random() - 0.5) * h * 2.5,
+      z: minZ + Math.random() * (maxZ - minZ),
+      baseR,
       phase: Math.random() * Math.PI * 2,
       speed: (0.3 + Math.random() * 0.5) * 0.02,
       twinkle, h: c.h, s: c.s, l: c.l,
@@ -90,34 +114,34 @@ function initStars(w, h) {
   }
 }
 
-function renderStar(ctx, s, tw) {
+function renderStar(ctx, s, tw, px, py, pr) {
   const alpha = 0.3 + tw * 0.7
-  const r = s.r * (0.85 + tw * 0.15)
+  const r = pr * (0.85 + tw * 0.15)
 
   const glowR = r * 4
-  const glow = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, glowR)
+  const glow = ctx.createRadialGradient(px, py, 0, px, py, glowR)
   glow.addColorStop(0, `hsla(${s.h}, ${s.s * 0.8}%, ${Math.min(s.l + 12, 98)}%, ${alpha * 0.3})`)
   glow.addColorStop(0.2, `hsla(${s.h}, ${s.s * 0.5}%, ${s.l + 5}%, ${alpha * 0.1})`)
   glow.addColorStop(0.5, `hsla(${s.h}, ${s.s * 0.3}%, ${s.l}%, ${alpha * 0.03})`)
   glow.addColorStop(1, `hsla(${s.h}, ${s.s * 0.1}%, ${s.l}%, 0)`)
   ctx.fillStyle = glow
-  ctx.fillRect(s.x - glowR, s.y - glowR, glowR * 2, glowR * 2)
+  ctx.fillRect(px - glowR, py - glowR, glowR * 2, glowR * 2)
 
   if (r > 0.8) {
     const rayLen = r * (3.5 + r * 0.6)
     for (let i = 0; i < 4; i++) {
       const a = i * Math.PI / 2 + s.phase
       const cos = Math.cos(a), sin = Math.sin(a)
-      const tipX = s.x + cos * rayLen, tipY = s.y + sin * rayLen
+      const tipX = px + cos * rayLen, tipY = py + sin * rayLen
       const spread = r * 0.5
-      const px = -sin * spread, py = cos * spread
-      const nx = sin * spread, ny = -cos * spread
+      const spx = -sin * spread, spy = cos * spread
+      const snx = sin * spread, sny = -cos * spread
       ctx.beginPath()
-      ctx.moveTo(s.x + px, s.y + py)
+      ctx.moveTo(px + spx, py + spy)
       ctx.lineTo(tipX, tipY)
-      ctx.lineTo(s.x + nx, s.y + ny)
+      ctx.lineTo(px + snx, py + sny)
       ctx.closePath()
-      const rayGrad = ctx.createLinearGradient(s.x, s.y, tipX, tipY)
+      const rayGrad = ctx.createLinearGradient(px, py, tipX, tipY)
       rayGrad.addColorStop(0, `hsla(${s.h}, ${s.s * 0.7}%, ${s.l + 10}%, ${alpha * 0.25})`)
       rayGrad.addColorStop(0.5, `hsla(${s.h}, ${s.s * 0.5}%, ${s.l}%, ${alpha * 0.08})`)
       rayGrad.addColorStop(1, `hsla(${s.h}, ${s.s * 0.3}%, ${s.l - 5}%, 0)`)
@@ -127,7 +151,7 @@ function renderStar(ctx, s, tw) {
   }
 
   ctx.beginPath()
-  ctx.arc(s.x, s.y, Math.max(r * 0.3, 0.4), 0, Math.PI * 2)
+  ctx.arc(px, py, Math.max(r * 0.3, 0.4), 0, Math.PI * 2)
   ctx.fillStyle = `hsla(${s.h}, 0%, 100%, ${Math.min(alpha * 0.9, 0.95)})`
   ctx.fill()
 }
@@ -138,16 +162,21 @@ function draw(time) {
   const ctx = canvas.getContext('2d')
   const cw = window.innerWidth, ch = window.innerHeight
 
-  // 多彩星云背景
-  ctx.fillStyle = '#010208'
-  ctx.fillRect(0, 0, cw, ch)
-  for (const p of bgPatches) {
-    const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r)
-    g.addColorStop(0, `hsla(${p.h}, 60%, 35%, 0.12)`)
-    g.addColorStop(0.3, `hsla(${p.h + 40}, 45%, 25%, 0.06)`)
-    g.addColorStop(1, 'rgba(0,0,0,0)')
-    ctx.fillStyle = g
-    ctx.fillRect(p.x - p.r, p.y - p.r, p.r * 2, p.r * 2)
+  // 背景：拖尾模式下叠加半透明遮罩，否则完整刷新星云
+  if (props.warpTrail) {
+    ctx.fillStyle = 'rgba(1,2,8,0.12)'
+    ctx.fillRect(0, 0, cw, ch)
+  } else {
+    ctx.fillStyle = '#010208'
+    ctx.fillRect(0, 0, cw, ch)
+    for (const p of bgPatches) {
+      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r)
+      g.addColorStop(0, `hsla(${p.h}, 60%, 35%, 0.12)`)
+      g.addColorStop(0.3, `hsla(${p.h + 40}, 45%, 25%, 0.06)`)
+      g.addColorStop(1, 'rgba(0,0,0,0)')
+      ctx.fillStyle = g
+      ctx.fillRect(p.x - p.r, p.y - p.r, p.r * 2, p.r * 2)
+    }
   }
 
   // 流星/彗星
@@ -205,16 +234,28 @@ function draw(time) {
   // 随机生成流星（低频）
   if (Math.random() < 0.008 && shootingStars.length < 2) spawnShootingStar(cw, ch)
 
-  stars.sort((a, b) => a.r - b.r)
-  for (const s of stars) {
-    const tw = 1 - s.twinkle * (0.5 + 0.5 * Math.sin(time * s.speed + s.phase))
-    renderStar(ctx, s, tw)
+  // ---- 3D 星空移动（warp-speed 效果）----
+  if (props.warpActive) {
+    const speedFactor = props.movementSpeed
+    for (const s of stars) {
+      s.z -= speedFactor
+      if (s.z < 1) {
+        s.z = maxZ
+        s.x = (Math.random() - 0.5) * cw * 2.5
+        s.y = (Math.random() - 0.5) * ch * 2.5
+      }
+    }
   }
 
+  // 透视投影并渲染星星
   for (const s of stars) {
-    if (Math.random() < 0.001) {
-      s.x = Math.random() * cw; s.y = Math.random() * ch
-    }
+    const scale = focalLength / s.z
+    const px = cw / 2 + s.x * scale
+    const py = ch / 2 + s.y * scale
+    const pr = s.baseR * Math.min(scale, 3)
+    if (px < -50 || px > cw + 50 || py < -50 || py > ch + 50) continue
+    const tw = 1 - s.twinkle * (0.5 + 0.5 * Math.sin(time * s.speed + s.phase))
+    renderStar(ctx, s, tw, px, py, pr)
   }
 
   animFrameId = requestAnimationFrame(draw)
