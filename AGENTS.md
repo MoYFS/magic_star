@@ -4,7 +4,7 @@
 
 ## 项目概述
 
-magic_star 是一个基于 Vue 3 + Vite 的 Web 应用。
+magic_star 是一个基于 Vue 3 + Vite 的 Web 应用，带有 Canvas 3D 星空背景动画。
 
 ## 技术栈
 
@@ -21,7 +21,7 @@ magic_star 是一个基于 Vue 3 + Vite 的 Web 应用。
 
 ```
 src/
-├── App.vue               # 根组件（布局壳，无业务逻辑）
+├── App.vue               # 根组件（包装 StarSky + 内容插槽）
 ├── main.js               # 入口
 ├── router/               # 路由定义
 │   └── index.js
@@ -29,7 +29,8 @@ src/
 ├── views/                # 页面级组件
 ├── components/           # 通用组件
 │   ├── common/           # 全局通用组件
-│   └── business/         # 业务组件
+│   ├── business/         # 业务组件
+│   └── StarSky.vue       # Canvas 3D 星空背景组件（warp-speed 效果）
 ├── composables/          # 组合式函数（useXxx）
 ├── api/                  # API 请求层
 ├── utils/                # 工具函数
@@ -38,6 +39,49 @@ src/
 │   └── images/           # 图片
 └── constants/            # 常量
 ```
+
+## StarSky 星空背景组件
+
+`src/components/StarSky.vue` 是一个全屏 Canvas 星空动画组件，支持 3D warp-speed 星移效果。
+
+### Props
+
+| Prop | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `warpActive` | Boolean | `true` | 是否启用 3D 星移效果 |
+| `warpTrail` | Boolean | `true` | 是否开启拖尾光轨（星星划过留下残影） |
+| `movementSpeed` | Number | `3.0` | 星移速度因子，建议范围 0.5 ~ 6.0 |
+
+### 使用方式
+
+```vue
+<template>
+  <StarSky>
+    <!-- 放在星空之上的内容 -->
+    <main>你的页面</main>
+  </StarSky>
+</template>
+
+<script setup>
+import StarSky from '@/components/StarSky.vue'
+</script>
+```
+
+### 定制参数
+
+```vue
+<!-- 关闭移动和拖尾，速度设为 2.0 -->
+<StarSky :warpActive="false" :warpTrail="false" :movementSpeed="2.0">
+  <main>内容</main>
+</StarSky>
+```
+
+### 效果说明
+
+- 星星具有 3D 空间坐标（x, y, z），通过透视投影（`focalLength / z`）产生近大远小效果
+- 每帧 `z` 递减，星星向观察者靠近，到最近处重置到最远，形成 warp-speed 飞行感
+- 拖尾模式不擦除背景，仅叠加半透明遮罩，星星留下光轨
+- 保留了原有的彩色星云背景、流星/彗星、星星光晕+射线+闪烁效果
 
 ## 核心规则
 

@@ -1,38 +1,64 @@
-# magic_star
+# magic_star ✨
 
-This template should help get you started developing with Vue 3 in Vite.
+一个带有 Canvas 3D 星空背景的 Vue 3 单页应用。星星具有 warp-speed 飞行效果，支持拖尾光轨、速度调节等参数。
 
-## Recommended IDE Setup
+## 预览
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+运行项目后，你会看到一个全屏的 3D 星空背景：
+- 彩色星星带有光晕和射线，持续闪烁
+- 星星从远处向观察者飞来，产生 warp-speed 穿梭感
+- 随机流星/彗星划过天空
+- 彩色星云背景
 
-## Recommended Browser Setup
+## 技术栈
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+- **框架**: Vue 3（Composition API + `<script setup>`）
+- **构建**: Vite 8
+- **语言**: JavaScript（SFC）
+- **星空动画**: Canvas 2D + requestAnimationFrame
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+## 快速开始
 
 ```sh
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+## 构建
 
 ```sh
 npm run build
+npm run preview
+```
+
+## StarSky 组件
+
+`src/components/StarSky.vue` 提供全屏星空背景，支持以下 Props：
+
+| Prop | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `warpActive` | Boolean | `true` | 是否启用 3D 星移效果 |
+| `warpTrail` | Boolean | `true` | 是否开启拖尾光轨 |
+| `movementSpeed` | Number | `3.0` | 星移速度，建议 0.5 ~ 6.0 |
+
+### 基础用法
+
+```vue
+<template>
+  <StarSky>
+    <main>你的页面内容</main>
+  </StarSky>
+</template>
+
+<script setup>
+import StarSky from '@/components/StarSky.vue'
+</script>
+```
+
+### 定制参数
+
+```vue
+<StarSky :warpActive="false" :warpTrail="false" :movementSpeed="2.0">
+  <main>静态星空背景</main>
+</StarSky>
 ```
