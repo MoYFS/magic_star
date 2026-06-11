@@ -14,6 +14,7 @@ magic_star 是一个基于 Vue 3 + Vite 的 Web 应用，带有 Canvas 3D 星空
 | 构建 | Vite 8 |
 | 语言 | JavaScript（SFC，无 JSX） |
 | 路径别名 | `@` → `./src` |
+| 国际化 | vue-i18n（zh-CN / en） |
 | 状态管理 | Pinia（约定，待安装） |
 | 路由 | Vue Router（约定，待安装） |
 
@@ -22,7 +23,12 @@ magic_star 是一个基于 Vue 3 + Vite 的 Web 应用，带有 Canvas 3D 星空
 ```
 src/
 ├── App.vue               # 根组件（包装 StarSky + 内容插槽）
-├── main.js               # 入口
+├── main.js               # 入口（注册 i18n）
+├── i18n/                 # 国际化配置
+│   └── index.js
+├── locales/              # 语言包
+│   ├── zh-CN.json
+│   └── en.json
 ├── router/               # 路由定义
 │   └── index.js
 ├── stores/               # Pinia store 模块
@@ -137,6 +143,36 @@ function handleLogin({ username, password }) {
 ### 缩放说明
 
 组件以 400×300（BASE_W × BASE_H）为基准设计尺寸，内部所有元素（字号、间距、圆角、输入框高度等）通过 `--s` CSS 变量等比缩放。缩放比例取 `width / BASE_W` 和 `height / BASE_H` 的较小值，确保内容完整在卡片内。传入不同 `width` / `height` 时自动适配。
+
+## 国际化（i18n）
+
+项目使用 `vue-i18n` 实现国际化，默认语言为 `zh-CN`，支持 `en`。
+
+### 语言包
+
+```
+src/locales/
+├── zh-CN.json    # 中文
+└── en.json       # 英文
+```
+
+### 语言切换
+
+App.vue 右上角有一个圆形语言切换按钮，点击在中文/英文间切换。
+
+### 添加新语言
+
+1. 创建 `src/locales/xx.json`，按已有格式补充翻译
+2. 在 `src/i18n/index.js` 的 `messages` 中添加该语言
+3. 在组件中使用 `t('key')` 引用翻译文本
+
+### 在组件中使用
+
+```js
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+// 模板中: {{ t('login.title') }}
+```
 
 ## 核心规则
 

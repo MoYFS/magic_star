@@ -1,6 +1,7 @@
 import './assets/main.css'
 
 import { createApp } from 'vue'
+import i18n from '@/i18n'
 import App from './App.vue'
 
 // 禁止页面缩放（Ctrl/Cmd + +/-/滚轮）
@@ -14,4 +15,6 @@ document.addEventListener('keydown', (e) => {
   }
 })
 
-createApp(App).mount('#app')
+const app = createApp(App)
+app.use(i18n)
+app.mount('#app')

@@ -1,0 +1,14 @@
+{
+  "login": {
+    "title": "Welcome Back",
+    "subtitle": "Please sign in to continue",
+    "username": "Username / Email",
+    "usernamePlaceholder": "Enter username",
+    "password": "Password",
+    "passwordPlaceholder": "Enter password",
+    "submit": "Sign In"
+  },
+  "lang": {
+    "switch": "中"
+  }
+}

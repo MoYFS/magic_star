@@ -1,0 +1,14 @@
+{
+  "login": {
+    "title": "欢迎回来",
+    "subtitle": "请登录以继续",
+    "username": "用户名 / 邮箱",
+    "usernamePlaceholder": "请输入用户名",
+    "password": "密码",
+    "passwordPlaceholder": "请输入密码",
+    "submit": "登 录"
+  },
+  "lang": {
+    "switch": "EN"
+  }
+}

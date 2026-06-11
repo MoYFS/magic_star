@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   /** 卡片宽度（px） */
@@ -10,6 +11,7 @@ const props = defineProps({
   theme: { type: String, default: 'dark' },
 })
 
+const { t } = useI18n()
 const emit = defineEmits(['login'])
 
 const username = ref('')
@@ -51,34 +53,34 @@ function handleSubmit() {
     <div class="glass-shine"></div>
 
     <!-- 标题 -->
-    <h2 class="login-title">欢迎回来</h2>
-    <p class="login-subtitle">请登录以继续</p>
+    <h2 class="login-title">{{ t('login.title') }}</h2>
+    <p class="login-subtitle">{{ t('login.subtitle') }}</p>
 
     <!-- 表单 -->
     <div class="login-form">
       <div class="field">
-        <label class="field-label">用户名 / 邮箱</label>
+        <label class="field-label">{{ t('login.username') }}</label>
         <input
           class="field-input"
           type="text"
           v-model="username"
-          placeholder="请输入用户名"
+          :placeholder="t('login.usernamePlaceholder')"
           @keyup.enter="handleSubmit"
         />
       </div>
 
       <div class="field">
-        <label class="field-label">密码</label>
+        <label class="field-label">{{ t('login.password') }}</label>
         <input
           class="field-input"
           type="password"
           v-model="password"
-          placeholder="请输入密码"
+          :placeholder="t('login.passwordPlaceholder')"
           @keyup.enter="handleSubmit"
         />
       </div>
 
-      <button class="login-btn" @click="handleSubmit">登 录</button>
+      <button class="login-btn" @click="handleSubmit">{{ t('login.submit') }}</button>
     </div>
   </div>
 </template>
@@ -110,24 +112,17 @@ function handleSubmit() {
   /* 液态光泽 + 3D 凸起阴影（加强） */
   box-shadow:
     0 10px 40px rgba(0, 0, 0, 0.5),
-    /* 外层投影 — 更沉 */
     0 3px 12px rgba(0, 0, 0, 0.25),
-    /* 过渡阴影 */
     inset 0 3px 2px rgba(209, 255, 255, 0.10),
-    /* 顶部凸起高光 */
     inset 0 -2px 2px rgba(209, 255, 255, 0.06),
-    /* 底部凸起 */
     inset 3px 0 6px rgba(209, 255, 255, 0.05),
-    /* 左侧凸起 */
     inset -3px 0 6px rgba(209, 255, 255, 0.05),
-    /* 右侧凸起 */
-    0 0 20px rgba(100, 180, 255, 0.06); /* 环境泛光 */
+    0 0 20px rgba(100, 180, 255, 0.06);
 
   color: rgba(255, 255, 255, 0.9);
 }
 
 /* ===== 边缘凸起圆滑层（加强） ===== */
-/* 双层层叠 + 更强渐变，模拟边缘膨胀凸出的 3D 视觉效果 */
 .edge-bulge {
   position: absolute;
   inset: -2px;
@@ -135,7 +130,6 @@ function handleSubmit() {
   pointer-events: none;
   z-index: 0;
 
-  /* 外层：亮色凸起渐变 */
   background:
     radial-gradient(
       ellipse at center,
@@ -146,7 +140,6 @@ function handleSubmit() {
       rgba(209, 255, 255, 0.50) 100%
     );
 
-  /* 仅显示在 border / padding 区域 */
   mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
@@ -155,7 +148,6 @@ function handleSubmit() {
   padding: 2.5px;
 }
 
-/* 第二层凸起 — 加深边缘厚重感 */
 .edge-bulge::after {
   content: '';
   position: absolute;
@@ -176,7 +168,6 @@ function handleSubmit() {
   padding: 2.5px;
 }
 
-/* 凸起边缘的流光动画 */
 @keyframes edge-flow {
   0% { opacity: 0.5; }
   50% { opacity: 1; }
@@ -334,7 +325,6 @@ function handleSubmit() {
 
 /* ===== 亮色主题（theme-light） ===== */
 .theme-light {
-  /* 卡片背景 — 亮色玻璃 */
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.35) 0%,
