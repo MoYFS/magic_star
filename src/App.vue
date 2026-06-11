@@ -1,36 +1,29 @@
 <script setup>
 import StarSky from '@/components/StarSky.vue'
+import LoginCard from '@/components/business/LoginCard.vue'
+
+function handleLogin({ username, password }) {
+  console.log('登录:', username, password)
+}
 </script>
 
 <template>
-  <StarSky :warpActive="true" :warpTrail="false" :movementSpeed="5.0" >
+  <StarSky :warpActive="true" :warpTrail="true" :movementSpeed="5.0">
     <main class="app-content">
+      <LoginCard :width="500" :height="420" @login="handleLogin" theme="dark"/>
     </main>
   </StarSky>
 </template>
 
 <style scoped>
 .app-content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  color: rgba(255, 255, 255, 0.85);
-  font-family: system-ui, sans-serif;
-  text-align: center;
-}
-
-.app-content h1 {
-  font-size: 3rem;
-  font-weight: 300;
-  letter-spacing: 0.1em;
-  text-shadow: 0 0 30px rgba(100, 150, 255, 0.3);
-  margin-bottom: 0.5rem;
-}
-
-.app-content p {
-  font-size: 1.1rem;
-  opacity: 0.6;
 }
 </style>
