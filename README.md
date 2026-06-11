@@ -62,3 +62,51 @@ import StarSky from '@/components/StarSky.vue'
   <main>静态星空背景</main>
 </StarSky>
 ```
+
+## LoginCard 登录卡片
+
+`src/components/business/LoginCard.vue` 是一个液态玻璃风格的登录卡片，支持亮暗主题切换和尺寸缩放。
+
+### Props
+
+| Prop | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `width` | Number | `400` | 卡片宽度（px） |
+| `height` | Number | `500` | 卡片高度（px） |
+| `theme` | String | `'dark'` | 主题：`'dark'` 暗色 \| `'light'` 亮色 |
+
+### 使用示例
+
+```vue
+<template>
+  <StarSky>
+    <main class="login-page">
+      <LoginCard :width="400" :height="520" @login="handleLogin" />
+    </main>
+  </StarSky>
+</template>
+
+<script setup>
+import StarSky from '@/components/StarSky.vue'
+import LoginCard from '@/components/business/LoginCard.vue'
+
+function handleLogin({ username, password }) {
+  console.log('登录:', username, password)
+}
+</script>
+
+<style scoped>
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+</style>
+```
+
+### 亮色主题
+
+```vue
+<LoginCard theme="light" />
+```

@@ -83,6 +83,54 @@ import StarSky from '@/components/StarSky.vue'
 - 拖尾模式不擦除背景，仅叠加半透明遮罩，星星留下光轨
 - 保留了原有的彩色星云背景、流星/彗星、星星光晕+射线+闪烁效果
 
+## LoginCard 登录卡片组件
+
+`src/components/business/LoginCard.vue` 是一个液态玻璃风格的登录卡片组件，支持亮/暗主题切换。
+
+### Props
+
+| Prop | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `width` | Number | `400` | 卡片宽度（px） |
+| `height` | Number | `500` | 卡片高度（px） |
+| `theme` | String | `'dark'` | 主题：`'dark'` 暗色 \| `'light'` 亮色 |
+
+### Events
+
+| 事件 | 载荷 | 说明 |
+|------|------|------|
+| `login` | `{ username, password }` | 点击登录按钮或回车时触发 |
+
+### 使用方式
+
+```vue
+<template>
+  <StarSky>
+    <main class="login-page">
+      <LoginCard :width="400" :height="520" @login="handleLogin" />
+    </main>
+  </StarSky>
+</template>
+
+<script setup>
+import LoginCard from '@/components/business/LoginCard.vue'
+
+function handleLogin({ username, password }) {
+  // 处理登录逻辑
+}
+</script>
+```
+
+### 亮色主题
+
+```vue
+<LoginCard theme="light" />
+```
+
+### 缩放说明
+
+组件以 400×500 为基准设计尺寸，内部所有元素（字号、间距、圆角、输入框高度等）通过 `--s` CSS 变量等比缩放。传入不同 `width` / `height` 时自动适配。
+
 ## 核心规则
 
 > 本项目**全面采用 Composition API**，禁止一切 Options API 写法。
