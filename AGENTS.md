@@ -85,7 +85,14 @@ import StarSky from '@/components/StarSky.vue'
 
 ## LoginCard 登录卡片组件
 
-`src/components/business/LoginCard.vue` 是一个液态玻璃风格的登录卡片组件，支持亮/暗主题切换。
+`src/components/business/LoginCard.vue` 是一个液态玻璃（Frosted Glass）风格的登录卡片组件，支持亮/暗主题切换、尺寸缩放。
+
+### 视觉效果
+
+- **液态玻璃** — 半透明渐变背景 + `backdrop-filter: blur(20px)` 毛玻璃效果，透出背后星空
+- **边缘凸起圆滑** — 径向渐变 + CSS mask 在边缘绘制高光，模拟 3D 膨胀凸起
+- **流动光泽** — 表面反射层动画模拟液态玻璃的流动反光
+- **多重心影** — 四方向 inset box-shadow 增强立体凸起感
 
 ### Props
 
