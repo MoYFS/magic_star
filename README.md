@@ -117,3 +117,7 @@ function handleLogin({ username, password }) {
 ```vue
 <LoginCard theme="light" />
 ```
+
+### 缩放说明
+
+组件以 400×300 为基准设计尺寸，内部元素（字号、间距、圆角、输入框高度等）通过 CSS 变量 `--s` 等比缩放。缩放比例取 `width/400` 和 `height/300` 的较小值，确保内容完整显示。

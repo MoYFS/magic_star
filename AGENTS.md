@@ -136,7 +136,7 @@ function handleLogin({ username, password }) {
 
 ### 缩放说明
 
-组件以 400×500 为基准设计尺寸，内部所有元素（字号、间距、圆角、输入框高度等）通过 `--s` CSS 变量等比缩放。传入不同 `width` / `height` 时自动适配。
+组件以 400×300（BASE_W × BASE_H）为基准设计尺寸，内部所有元素（字号、间距、圆角、输入框高度等）通过 `--s` CSS 变量等比缩放。缩放比例取 `width / BASE_W` 和 `height / BASE_H` 的较小值，确保内容完整在卡片内。传入不同 `width` / `height` 时自动适配。
 
 ## 核心规则
 
