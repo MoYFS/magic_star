@@ -337,9 +337,9 @@ function handleSubmit() {
   /* 卡片背景 — 亮色玻璃 */
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.6) 0%,
-    rgba(240, 245, 255, 0.55) 50%,
-    rgba(255, 255, 255, 0.5) 100%
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(240, 245, 255, 0.30) 50%,
+    rgba(255, 255, 255, 0.25) 100%
   );
   border-color: rgba(255, 255, 255, 0.4);
   box-shadow:
@@ -369,7 +369,7 @@ function handleSubmit() {
 
 .theme-light .field-input {
   background: rgba(255, 255, 255, 0.5);
-  border-color: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.1);
   color: rgba(10, 15, 40, 0.9);
   font-weight: 500;
 }

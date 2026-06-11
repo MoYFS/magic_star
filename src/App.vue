@@ -10,7 +10,7 @@ function handleLogin({ username, password }) {
 <template>
   <StarSky :warpActive="true" :warpTrail="true" :movementSpeed="5.0">
     <main class="app-content">
-      <LoginCard :width="500" :height="420" @login="handleLogin" theme="dark"/>
+      <LoginCard :width="400" :height="320" @login="handleLogin" theme="light"/>
     </main>
   </StarSky>
 </template>
