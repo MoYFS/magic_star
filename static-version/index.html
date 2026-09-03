@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!--
+  magic_star —— 原生 HTML/CSS/JS 版本（由 Vue 工程转换，未使用任何框架）
+  对应原工程：src/App.vue + src/components/StarSky.vue + src/components/business/LoginCard.vue
+  直接双击打开本文件即可运行（无需构建、无需服务器）。
+-->
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" href="favicon.ico">
+    <title>magic_star</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/star-sky.css">
+    <link rel="stylesheet" href="css/login-card.css">
+  </head>
+  <body>
+    <!-- StarSky（对应 src/components/StarSky.vue）：全屏 Canvas 星空背景 -->
+    <canvas id="star-sky-canvas" class="star-sky"></canvas>
+    <div class="star-sky-overlay">
+      <!-- App 内容插槽（对应 src/App.vue 的 <main class="app-content">） -->
+      <main class="app-content">
+        <!-- LoginCard（对应 src/components/business/LoginCard.vue）：width=400, height=320, theme=dark -->
+        <div id="login-card"></div>
+        <!-- 语言切换按钮 -->
+        <button id="lang-btn" class="lang-btn" type="button">EN</button>
+      </main>
+    </div>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/star-sky.js"></script>
+    <script src="js/login-card.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

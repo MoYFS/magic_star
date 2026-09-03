@@ -1,0 +1,22 @@
+/* ============================================================
+   star-sky.css —— 全屏 Canvas 星空背景
+   对应：src/components/StarSky.vue(scoped)
+   ============================================================ */
+
+.star-sky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.star-sky-overlay {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 100vh;
+}
